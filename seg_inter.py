@@ -30,9 +30,49 @@ class Event:
 #-----------------------------------------------------------------
 # checks if line segment p1p2 and p3p4 intersect
 #-----------------------------------------------------------------
+#find if the point is on the line segment
+def onLine(p1,p2, point):
+    if (point[0] <= max(p1[0],p2[0]) and point[0] <= min(p1[0],p2[0])
+    and point[1] <= max(p1[1], p2[1]) and point[1] <= min(p1[1], p2[1])):
+        return True
+    else:
+        return False
+
+def direction(p1,p2,p3):
+    # (b.y-a.y)*(c.x-b.x)-(b.x-a.x)*(c.y-b.y)
+    val = (p2[1]-p1[1])*(p3[0]-p2[0])-(p2[0]-p1[0])*(p3[1]-p2[1])
+    if val == 0:
+        #collinear
+        return 0
+    elif val < 0:
+        #counter-clockwise
+        return -1
+    else:
+        #clockwise
+        return 1
+
 def intersect(p1, p2, p3, p4):
-    # *** need to implement ***    
-    return p1            
+    # *** need to implement *** 
+    # 
+    # Is this the code for when we hit an intersection?
+    # or for finding it?   
+    dir1 = direction(p1, p2, p3)
+    dir2 = direction(p1, p2, p4)
+    dir3 = direction(p3, p4, p1)
+    dir4 = direction(p3, p4, p2)
+
+    if not (dir1 == dir2) and (not(dir3 == dir4)):
+        return True
+    elif dir1 == 0 and onLine(p1, p2, p3):
+        return True
+    elif dir2 == 0 and onLine(p1, p2, p4):
+        return True
+    elif dir3 == 0 and onLine(p3, p4, p1):
+        return True
+    elif dir4 == 0 and onLine(p3, p4, p2):
+        return True
+
+    return False           
 
 
 #-----------------------------------------------------------------
@@ -61,12 +101,54 @@ def find_intersections(event):
         if event.is_left:
             print("left event")
 	    # *** need to implement ***
+            # from Pseudocode in class; predecessor
+            # label is event.
+            
+            
+            # node = T.insert_segment(event, segment)
+            # pred = T.predecessor(node)
+            # if pred:
+            #     if intersect(node,pred):
+            #         Q.insert(int.pt,Event())
+            # # Successor
+            # succ = T.successor(node)
+            # if succ:
+            #     if intersect(node[0],node[1],succ[0],succ[1]):
+            #         Q.insert(int.pt,Event(...))
 
         elif not event.is_intersection:
+            
+            
+            # node = T.search(S[event])
+            # pred = T.predecessor(node)
+            # succ = T.successor(node)
+            # if pred and succ:
+            #     if intersect(pred,succ):
+            #         Q.insert(inter.pt,Event(...))
+            # T.delete(node)
+            
+            
             print("right event")
 	    # *** need to implement ***
 
         else:
+            # T.append(x,y) or is it I.append(x,y)
+            # n1 = t.search(seg1) n2 = t.search(seg2)
+            T.append(event[0],event[1])
+            # n1 = T.search(s1)
+            # n2 = T.search(s2)
+            
+            # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
+            # where we intersect.
+            T.swap(n1,n2,event[0])
+            pred = T.predecessor(n1)
+            succ = T.successor(n2)
+            # if pred:
+            #     if intersect(p1, p2, p3, p4):
+            #         Q.insert(key)
+            # if succ:
+            #     if intersect(p1, p2, p3, p4):
+            #         Q.insert(key)
             print("intersection event")
 	    # *** need to implement ***
           

@@ -165,7 +165,8 @@ class RedBlackTree:
   def Above(self, s1, s2, x):
     # *** need to implement ***
     # fn used in searchx
-    return False
+    return self.s1
+    # return False
 
   def searchx(self, key, data, xcoord):
     x = self.root
@@ -177,10 +178,18 @@ class RedBlackTree:
     print('swap')
     # *** need to implement ***
     # fn used to swap two nodes in the tree
+
+    # is it as simple as this? 
+    hold = self.nn1
+    self.nn1 = self.nn2
+    self.nn2 = hold
+
     
   def insert_segment(self, label, segment):
     # *** need to implement ***
     # fn used to insert a segment into the tree
+
+    # Modified standard insert for a redBlack tree
     print('insert_segment')
 
   def __insert_helperx(self, z):
