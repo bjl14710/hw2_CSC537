@@ -105,8 +105,8 @@ def find_intersections(event):
             # label is event.
             
             
-            # node = T.insert_segment(event, segment)
-            # pred = T.predecessor(node)
+            node = T.insert_segment(event, s)
+            pred = T.predecessor(node)
             # if pred:
             #     if intersect(node,pred):
             #         Q.insert(int.pt,Event())
@@ -119,7 +119,7 @@ def find_intersections(event):
         elif not event.is_intersection:
             
             
-            # node = T.search(S[event])
+            # node = T.search(s[event])
             # pred = T.predecessor(node)
             # succ = T.successor(node)
             # if pred and succ:

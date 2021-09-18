@@ -188,13 +188,76 @@ class RedBlackTree:
   def insert_segment(self, label, segment):
     # *** need to implement ***
     # fn used to insert a segment into the tree
+     x = Node(label, segment)
 
-    # Modified standard insert for a redBlack tree
-    print('insert_segment')
+     self.__insert_helperx(x)
+
+     x.color = RED
+     while x != self.root and x.parent.color == RED:
+      if x.parent == x.parent.parent.left:
+        y = x.parent.parent.right
+        if y and y.color == RED:
+          x.parent.color = BLACK
+          y.color = BLACK
+          x.parent.parent.color = RED
+          x = x.parent.parent
+        else:
+          if x == x.parent.right:
+            x = x.parent
+            self.__left_rotate(x)
+          x.parent.color = BLACK
+          x.parent.parent.color = RED
+          self.__right_rotate(x.parent.parent)
+      else:
+        y = x.parent.parent.left
+        if y and y.color == RED:
+          x.parent.color = BLACK
+          y.color = BLACK
+          x.parent.parent.color = RED
+          x = x.parent.parent
+        else:
+          if x == x.parent.left:
+            x = x.parent
+            self.__right_rotate(x)
+          x.parent.color = BLACK
+          x.parent.parent.color = RED
+          self.__left_rotate(x.parent.parent)
+      self.root.color = BLACK   
+      
+      # Modified standard insert for a redBlack tree
+      print('insert_segment')
 
   def __insert_helperx(self, z):
     # *** need to implement ***
     # fn used by insert_segment
+
+
+    # traverses the tree
+    y = NilNode.instance()
+    x = self.root
+    while x and x.key != z.key:
+      y = x
+      if z.key < x.key:
+        x = x.left
+      else:
+        x = x.right
+        
+    if z.key == y.key or z.key == x.key: return
+    
+    z.parent = y
+    if not y:
+      self.root = z
+    else:
+      if z.key < y.key:
+        y.left = z
+      else:
+        y.right = z
+    
+    self.size += 1
+
+
+
+
     print('__insert_helperx')
 # *** ---------------------------    
     
