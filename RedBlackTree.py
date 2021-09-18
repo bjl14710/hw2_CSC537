@@ -188,45 +188,46 @@ class RedBlackTree:
   def insert_segment(self, label, segment):
     # *** need to implement ***
     # fn used to insert a segment into the tree
-     x = Node(label, segment)
+    x = Node(label, segment)
 
-     self.__insert_helperx(x)
+    self.__insert_helperx(x)
 
-     x.color = RED
-     while x != self.root and x.parent.color == RED:
-      if x.parent == x.parent.parent.left:
-        y = x.parent.parent.right
-        if y and y.color == RED:
-          x.parent.color = BLACK
-          y.color = BLACK
-          x.parent.parent.color = RED
-          x = x.parent.parent
-        else:
-          if x == x.parent.right:
-            x = x.parent
-            self.__left_rotate(x)
-          x.parent.color = BLACK
-          x.parent.parent.color = RED
-          self.__right_rotate(x.parent.parent)
+    x.color = RED
+    while x != self.root and x.parent.color == RED:
+     if x.parent == x.parent.parent.left:
+      y = x.parent.parent.right
+      if y and y.color == RED:
+        x.parent.color = BLACK
+        y.color = BLACK
+        x.parent.parent.color = RED
+        x = x.parent.parent
       else:
-        y = x.parent.parent.left
-        if y and y.color == RED:
-          x.parent.color = BLACK
-          y.color = BLACK
-          x.parent.parent.color = RED
-          x = x.parent.parent
-        else:
-          if x == x.parent.left:
-            x = x.parent
-            self.__right_rotate(x)
-          x.parent.color = BLACK
-          x.parent.parent.color = RED
-          self.__left_rotate(x.parent.parent)
-      self.root.color = BLACK   
+        if x == x.parent.right:
+          x = x.parent
+          self.__left_rotate(x)
+        x.parent.color = BLACK
+        x.parent.parent.color = RED
+        self.__right_rotate(x.parent.parent)
+    else:
+      y = x.parent.parent.left
+      if y and y.color == RED:
+        x.parent.color = BLACK
+        y.color = BLACK
+        x.parent.parent.color = RED
+        x = x.parent.parent
+      else:
+        if x == x.parent.left:
+          x = x.parent
+          self.__right_rotate(x)
+        x.parent.color = BLACK
+        x.parent.parent.color = RED
+        self.__left_rotate(x.parent.parent)
+    self.root.color = BLACK   
       
       # Modified standard insert for a redBlack tree
-      print('insert_segment')
-
+    print('insert_segment')
+    return x
+      
   def __insert_helperx(self, z):
     # *** need to implement ***
     # fn used by insert_segment
