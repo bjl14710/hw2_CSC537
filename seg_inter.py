@@ -113,12 +113,14 @@ def find_intersections(event):
             if pred:
                 # this is taking a different approach. Need to check out if this is correct.
                 # This is different than the pseudo code so need to take a look at it later.
+                # need the predecessor for the S[cnt+1] segment. pred is a node, so how do I get the semgents?
                 if cnt+1 < Q.size:
                     if intersect(S[cnt][0],S[cnt][1],S[cnt+1][0],S[cnt+1][1]):
                         T.insert_segment(S[cnt][0],S[cnt])
             # Successor
             # succ = T.successor(node)
             # if succ:
+            #     if intersect(p1, p2, p3, p4)
             #     if intersect(node[0],node[1],succ[0],succ[1]):
             #         Q.insert(int.pt,Event(...))
 
