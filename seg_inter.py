@@ -107,7 +107,10 @@ def find_intersections(event):
             # label is event.
 
             #Event(s[0][0], s[0][1], True, False, s[1], label)
+
+            # maybe the .data is how we get the information from the nodes. .data or at least for event, there is an x and a y
             
+            # OK so event has a .x and a .y AND IT has an Other_end: which is a tuple. So that might be a segment????
             
             pred = Q.predecessor(holdNode)
             if pred:
@@ -117,12 +120,20 @@ def find_intersections(event):
                 if cnt+1 < Q.size:
                     if intersect(S[cnt][0],S[cnt][1],S[cnt+1][0],S[cnt+1][1]):
                         T.insert_segment(S[cnt][0],S[cnt])
-            # Successor
-            # succ = T.successor(node)
-            # if succ:
-            #     if intersect(p1, p2, p3, p4)
-            #     if intersect(node[0],node[1],succ[0],succ[1]):
-            #         Q.insert(int.pt,Event(...))
+            # Successor :: should we the Q and T's be switched, I switched it as I saw our T tree was empty
+            #  but the pseudo code has it switched.
+            # What should the node be??? I am using the smallest from the Q.
+            succ = Q.successor(holdNode)
+            if succ:
+                # if intersect(p1, p2, p3, p4)
+                # need the succ and the pred for above, so then we can. Then we need to send an event through the insert segment
+                # if intersect(node[0],node[1],succ[0],succ[1]):
+                if cnt+1 < Q.size:
+                    if intersect(S[cnt][0],S[cnt][1],S[cnt+1][0],S[cnt+1][1]):
+                #         Q.insert(int.pt,Event(...))
+                #         insert_segment(label, segment) So the label is somewhat like a key.
+                #  THE KEY IS THE LOCATION IN THE TREE! I THINK
+                        Q.insert_segment(S[cnt][0],event.other_end)
 
         elif not event.is_intersection:
             

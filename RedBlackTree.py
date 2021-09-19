@@ -189,7 +189,8 @@ class RedBlackTree:
     # *** need to implement ***
     # fn used to insert a segment into the tree
     
-    x = Node(label, segment)
+    # need to compare with the x? Is x the key? what is the key?
+    x = Node(label[0], segment)
 
     self.__insert_helperx(x)
 
