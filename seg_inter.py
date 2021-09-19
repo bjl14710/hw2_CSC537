@@ -74,12 +74,13 @@ def intersect(p1, p2, p3, p4):
 
     return False           
 
-
+cnt = 0
 #-----------------------------------------------------------------
 # find_intersections callback
 #-----------------------------------------------------------------
 def find_intersections(event):
     global S
+    global cnt
     Q = RedBlackTree()
     label = 0
     for s in S:
@@ -97,20 +98,25 @@ def find_intersections(event):
     while not Q.is_empty():
         min_node = Q.minimum()
         event = min_node.data
+        holdNode = min_node
         Q.delete(min_node)
         if event.is_left:
             print("left event")
 	    # *** need to implement ***
             # from Pseudocode in class; predecessor
             # label is event.
+
+            #Event(s[0][0], s[0][1], True, False, s[1], label)
             
             
-            node = T.insert_segment(event, s)
-            pred = T.predecessor(node)
-            # if pred:
-            #     if intersect(node,pred):
-            #         Q.insert(int.pt,Event())
-            # # Successor
+            pred = Q.predecessor(holdNode)
+            if pred:
+                # this is taking a different approach. Need to check out if this is correct.
+                # This is different than the pseudo code so need to take a look at it later.
+                if cnt+1 < Q.size:
+                    if intersect(S[cnt][0],S[cnt][1],S[cnt+1][0],S[cnt+1][1]):
+                        T.insert_segment(S[cnt][0],S[cnt])
+            # Successor
             # succ = T.successor(node)
             # if succ:
             #     if intersect(node[0],node[1],succ[0],succ[1]):
@@ -141,8 +147,8 @@ def find_intersections(event):
             # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
             # where we intersect.
             T.swap(n1,n2,event[0])
-            pred = T.predecessor(n1)
-            succ = T.successor(n2)
+            # pred = T.predecessor(n1)
+            # succ = T.successor(n2)
             # if pred:
             #     if intersect(p1, p2, p3, p4):
             #         Q.insert(key)
@@ -150,6 +156,7 @@ def find_intersections(event):
             #     if intersect(p1, p2, p3, p4):
             #         Q.insert(key)
             print("intersection event")
+        cnt = cnt + 1
 	    # *** need to implement ***
           
     print(intersections)
