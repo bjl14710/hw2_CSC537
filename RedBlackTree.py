@@ -172,6 +172,13 @@ class RedBlackTree:
     x = self.root
     # *** need to implement ***
     # fn used to search for a segment (data)
+    if x is None: x = self.root
+    while x:# and x.key != key:
+      if key < x.key:
+        x = x.left
+      else:
+        x = x.right
+    return x
     
 
   def swap(self, nn1, nn2, x):      
@@ -190,11 +197,11 @@ class RedBlackTree:
     # fn used to insert a segment into the tree
     
     # need to compare with the x? Is x the key? what is the key?
-    x = Node(label[0], segment)
+    x = Node(label, segment)
 
     self.__insert_helperx(x)
 
-    # x.color = RED
+    x.color = RED
     # while x != self.root and x.parent.color == RED:
     #   if x.parent == x.parent.parent.left:
     #     y = x.parent.parent.right
