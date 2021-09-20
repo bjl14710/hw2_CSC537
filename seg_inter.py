@@ -116,7 +116,7 @@ def find_intersections(event):
     while not Q.is_empty():
         min_node = Q.minimum()
         event = min_node.data
-        holdNode = min_node
+        # holdNode = min_node
         Q.delete(min_node)
         # if hasattr(event, is_left):
         #     print("testing")
@@ -141,24 +141,22 @@ def find_intersections(event):
                 # this is taking a different approach. Need to check out if this is correct.
                 # This is different than the pseudo code so need to take a look at it later.
                 # need the predecessor for the S[cnt+1] segment. pred is a node, so how do I get the semgents?
-                if cnt+1 < Q.size:
-                    if intersect(node.data[0],node.data[1],pred.data[0],pred.data[1]):
+                if intersect(node.data[0],node.data[1],pred.data[0],pred.data[1]):
                         # Q.insert_segment(line_intersection(node.data[0],node.data[1]),(node.data[0],node.data[1]),event)
-                        print("intersect pred")
+                    print("intersect pred")
             # Successor :: should we the Q and T's be switched, I switched it as I saw our T tree was empty
             #  but the pseudo code has it switched.
             # What should the node be??? I am using the smallest from the Q.
-            succ = Q.successor(holdNode)
-            if succ.data:
+            succ = T.successor(node)
+            if succ:
                 # if intersect(p1, p2, p3, p4)
                 # need the succ and the pred for above, so then we can. Then we need to send an event through the insert segment
                 # if intersect(node[0],node[1],succ[0],succ[1]):
-                if cnt+1 < Q.size:
-                    if intersect(node.data[0],node.data[1],succ.data[0],succ.data[1]):
+                if intersect(node.data[0],node.data[1],succ.data[0],succ.data[1]):
                 #         Q.insert(int.pt,Event(...))
                 #         insert_segment(label, segment) So the label is somewhat like a key.
                 #  THE KEY IS THE LOCATION IN THE TREE! I THINK
-                     print("intersect succ")
+                    print("intersect succ")
                         # Q.insert_segment(line_intersection((node.data.x,node.data.y),holdNode.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end),event)
 
         elif not event.is_intersection:
