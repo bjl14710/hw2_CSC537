@@ -44,8 +44,25 @@ def line_intersection(line1, line2):
     y = det(d, ydiff) / div
     return x, y
 
+def line_intersect(Ax1, Ay1, Ax2, Ay2, Bx1, By1, Bx2, By2):
+    """ returns a (x, y) tuple or None if there is no intersection """
+    d = (By2 - By1) * (Ax2 - Ax1) - (Bx2 - Bx1) * (Ay2 - Ay1)
+    if d:
+        uA = ((Bx2 - Bx1) * (Ay1 - By1) - (By2 - By1) * (Ax1 - Bx1)) / d
+        uB = ((Ax2 - Ax1) * (Ay1 - By1) - (Ay2 - Ay1) * (Ax1 - Bx1)) / d
+    else:
+        return
+    if not(0 <= uA <= 1 and 0 <= uB <= 1):
+        return
+    x = Ax1 + uA * (Ax2 - Ax1)
+    y = Ay1 + uA * (Ay2 - Ay1)
+ 
+    return x, y
+
 def find_inters(S):
     print("find_inters")  # code from Q1
+    
+    
     
 def drawSegments(S):
     for s in S:
@@ -97,9 +114,9 @@ S1 = [[ P1[0], P1[1]],
      [ P1[3], P1[0]],
     ]
     
-#myDCEL = DCEL()
-#myDCEL.build_dcel(P1, S1)
-#drawFaces(myDCEL)
+# myDCEL = DCEL()
+# myDCEL.build_dcel(P1, S1)
+# drawFaces(myDCEL)
 
 
 P2 = [(500, 900), (700, 800), (350, 100), (200, 500)]
@@ -119,9 +136,18 @@ P3 = P1.copy()
 P3.extend(P2)
 S3 = S1.copy()
 S3.extend(S2)
+
+find_inters(S3)
+
+# canvas.create_line(x, y, x+1, y, fill="#ff0000")
+
 myDCEL = DCEL()
 myDCEL.build_dcel(P3, S3)
 #drawFaces(myDCEL)
+
+
+
+
 
 root.mainloop()
 

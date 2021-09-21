@@ -165,6 +165,11 @@ class RedBlackTree:
   def Above(self, s1, s2, x):
     # *** need to implement ***
     # fn used in searchx
+    # self balance by x 
+
+    # if s1 is higher than s2 than that is the above segment. 
+    if s1[0][1] < s2[0][1]:
+      self.s1 = self.s2
     return self.s1
     # return False
 
@@ -173,8 +178,8 @@ class RedBlackTree:
     # *** need to implement ***
     # fn used to search for a segment (data)
     if x is None: x = self.root
-    while x:# and x.key != key:
-      if key < x.key:
+    while data[0] and not(x.right.right == None or x.left.left == None):# and x.key != key:
+      if  x.data[0][0] < xcoord and x.left.left != None:
         x = x.left
       else:
         x = x.right
@@ -186,7 +191,6 @@ class RedBlackTree:
     # *** need to implement ***
     # fn used to swap two nodes in the tree
 
-    # is it as simple as this? 
     hold = self.nn1
     self.nn1 = self.nn2
     self.nn2 = hold
@@ -202,38 +206,37 @@ class RedBlackTree:
     self.__insert_helperx(x)
 
     x.color = RED
-    # while x != self.root and x.parent.color == RED:
-    #   if x.parent == x.parent.parent.left:
-    #     y = x.parent.parent.right
-    #     if y and y.color == RED:
-    #       x.parent.color = BLACK
-    #       y.color = BLACK
-    #       x.parent.parent.color = RED
-    #       x = x.parent.parent
-    #     else:
-    #       if x == x.parent.right:
-    #         x = x.parent
-    #         self.__left_rotate(x)
-    #       x.parent.color = BLACK
-    #       x.parent.parent.color = RED
-    #       self.__right_rotate(x.parent.parent)
-    #   else:
-    #     y = x.parent.parent.left
-    #     if y and y.color == RED:
-    #       x.parent.color = BLACK
-    #       y.color = BLACK
-    #       x.parent.parent.color = RED
-    #       x = x.parent.parent
-    #     else:
-    #       if x == x.parent.left:
-    #         x = x.parent
-    #         self.__right_rotate(x)
-    #       x.parent.color = BLACK
-    #       x.parent.parent.color = RED
-    #       self.__left_rotate(x.parent.parent)
-    # self.root.color = BLACK
+    while x != self.root and x.parent.color == RED:
+      if x.parent == x.parent.parent.left:
+        y = x.parent.parent.right
+        if y and y.color == RED:
+          x.parent.color = BLACK
+          y.color = BLACK
+          x.parent.parent.color = RED
+          x = x.parent.parent
+        else:
+          if x == x.parent.right:
+            x = x.parent
+            self.__left_rotate(x)
+          x.parent.color = BLACK
+          x.parent.parent.color = RED
+          self.__right_rotate(x.parent.parent)
+      else:
+        y = x.parent.parent.left
+        if y and y.color == RED:
+          x.parent.color = BLACK
+          y.color = BLACK
+          x.parent.parent.color = RED
+          x = x.parent.parent
+        else:
+          if x == x.parent.left:
+            x = x.parent
+            self.__right_rotate(x)
+          x.parent.color = BLACK
+          x.parent.parent.color = RED
+          self.__left_rotate(x.parent.parent)
+    self.root.color = BLACK   
 
-    # x.color = RED
     
     print('insert_segment')
     return x
