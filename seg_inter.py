@@ -175,6 +175,9 @@ def find_intersections(event):
                     Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
                     
                     # Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label))
+                    intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end)
+                    
+                    intersections.append((intersectPoint[0],intersectPoint[1]))
                     
 
                     # intersections.append(line_intersection(node.data[0],node.data[1]),(pred.data[0],pred.data[1]))
