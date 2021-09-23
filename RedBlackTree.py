@@ -202,6 +202,7 @@ class RedBlackTree:
     # return x
 
     if x is None: x = self.root
+    if key is None: return x
     while x:# and x.key != key:
       if key < x.key:
         x = x.left
@@ -217,10 +218,40 @@ class RedBlackTree:
     # *** need to implement ***
     # fn used to swap two nodes in the tree
 
-    hold = self.nn1
-    self.nn1 = self.nn2
-    self.nn2 = hold
+    # print('nn1 ', nn1.key)
+    # print('nn2 ', nn2.key)
+    
+    tmp = Node(0)
+    if nn1.key is None:
+      tmp.key = None
+      # if not (nn1.data is None):
+      #   tmp.data = nn1.data
+    if nn1.data is None:
+      tmp.data = None
+      # if not (nn1.key is None):
+      #   tmp.key = nn1.key
+    else:
+      tmp.key = nn1.key
+      tmp.data = nn1.data
+    
+    if nn2.key is None:
+      nn1.key = None
+      # if not (nn2.data is None):
+      #   nn1.data = nn2.data
+    try:
+      if nn2.data is None:
+        nn1.data = None
+        # if not (nn2.key is None):
+        #   nn1.key = nn2.key
+      else:
+          nn1.key = nn2.key
+          nn1.data = nn2.data
 
+      nn2.key = tmp.key
+      nn2.data = tmp.data
+    except:
+      nn2.key = tmp.key
+      nn2.data = tmp.data
     
   def insert_segment(self, label, segment):
     # *** need to implement ***
@@ -346,10 +377,9 @@ class RedBlackTree:
       y = self.successor(z)
     if not y.left:
       x = y.right
-    else:
+    elif not y.right:
       x = y.left
     x.parent = y.parent
-
     if not y.parent:
       self.root = x
     else:

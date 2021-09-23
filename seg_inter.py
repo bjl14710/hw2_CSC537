@@ -65,7 +65,8 @@ def intersect(p1, p2, p3, p4):
 
 
     det = A1*B2 - A2*B1
-
+    if det == 0:
+        return None
     # C = Ax1+By1
 
 
@@ -120,12 +121,13 @@ def intersect(p1, p2, p3, p4):
 
 
 
-
+intersectPts = []
  
 
 def find_intersections(event):
     global S
     global cnt
+    global intersectPts
     Q = RedBlackTree()
     label = 0
     for s in S:
@@ -147,111 +149,135 @@ def find_intersections(event):
         Q.delete(min_node)
         # if hasattr(event, is_left):
         #     print("testing")
-        try:
-            if event.is_left:
-                print("left event")
-            # *** need to implement ***
-                # from Pseudocode in class; predecessor
-                # label is event.
-                node = T.insert_segment(event.label, ((event.x,event.y),event.other_end))
-                #Event(s[0][0], s[0][1], True, False, s[1], label)
+        if event.is_left:
+            print("left event")
+        # *** need to implement ***
+            # from Pseudocode in class; predecessor
+            # label is event.
+            node = T.insert_segment(event.label, Event(event.x, event.y, False, False, event.other_end, event.label))
+            #Event(s[0][0], s[0][1], True, False, s[1], label)
 
-                # maybe the .data is how we get the information from the nodes. .data or at least for event, there is an x and a y
-                
-                # OK so event has a .x and a .y AND IT has an Other_end: which is a tuple. So that might be a segment????
+            # maybe the .data is how we get the information from the nodes. .data or at least for event, there is an x and a y
+            
+            # OK so event has a .x and a .y AND IT has an Other_end: which is a tuple. So that might be a segment????
 
-                # Q.insert has an attribute of data=None. So, if there is no event that is put in the insert function, then we only get the 
-                # segment. This is why sometimes we don't get the event.is_left to occur.
-                pred = T.predecessor(node)
-                # pred = Q.predecessor(holdNode)
-                if pred:
-                    # this is taking a different approach. Need to check out if this is correct.
-                    # This is different than the pseudo code so need to take a look at it later.
-                    # need the predecessor for the S[cnt+1] segment. pred is a node, so how do I get the semgents?
-                    if intersect(node.data[0],node.data[1],pred.data[0],pred.data[1]):
-                        # Q.insert_segment(event.label,(node.data[0],node.data[1]))
-                        Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label))
-                        
-                        # intersections.append(line_intersection(node.data[0],node.data[1]),(pred.data[0],pred.data[1]))
-                        # point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
-                         
-                        # intersections.append(point)
-                        
-                        # Q.insert_segment(line_intersection(node.data[0],node.data[1]),(node.data[0],node.data[1]))
-                        print("intersect pred")
-                        
-                # Successor :: should we the Q and T's be switched, I switched it as I saw our T tree was empty
-                # Q and T's be switched, I switched it as I saw our T tree was empty
-                #  but the pseudo code has it but the pseudo code has it
-                #  switched.
-                # What should the node be??? I am using the smallest from the Q.
-                succ = T.successor(node)
-                if succ:
-                    # if intersect(p1, p2, p3, p4)
-                    # need the succ and the pred for above, so then we can. Then we need to send an event through the insert segment
-                    # if intersect(node[0],node[1],succ[0],succ[1]):
-                    if intersect(node.data[0],node.data[1],succ.data[0],succ.data[1]):
-                        # Q.insert_segment(event.label,(node.data[0],node.data[1]))
-                        Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label))
-                        
-                        # point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
-                        # intersections.append(point)
-                        # intersections.append(line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1]))
-                        # intersections = line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1])
-                    #         Q.insert(int.pt,Event(...))
-                    #         insert_segment(label, segment) So the label is somewhat like a key.
-                    #  THE KEY IS THE VALUE IN THE NODE! I THINK
-                        print("intersect succ")
-                            # Q.insert_segment(line_intersection((node.data.x,node.data.y),holdNode.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end),event)
+            # Q.insert has an attribute of data=None. So, if there is no event that is put in the insert function, then we only get the 
+            # segment. This is why sometimes we don't get the event.is_left to occur.
+            pred = T.predecessor(node)
+            # pred = Q.predecessor(holdNode)
+            if pred:
+                # this is taking a different approach. Need to check out if this is correct.
+                # This is different than the pseudo code so need to take a look at it later.
+                # need the predecessor for the S[cnt+1] segment. pred is a node, so how do I get the semgents?
+                if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end):
+                    # Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                    #  x, y, is_left=True, is_intersection=False, other_end=None, label=None, pl=None, ps=None, sl = None, ss=None
+                    Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
+                    
+                    # Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label))
+                    
 
-            elif not event.is_intersection:
-                
-                
-                node = T.searchx(node.key, node.data, event.x)
-                # node = T.search(s[event])
-                pred = T.predecessor(node)
-                succ = T.successor(node)
-                if pred and succ:
-                    if intersect(pred[0],pred[1],succ[0],succ[1]):
-                        Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                    # intersections.append(line_intersection(node.data[0],node.data[1]),(pred.data[0],pred.data[1]))
+                    # point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
+                        
+                    # intersections.append(point)
+                    
+                    # Q.insert_segment(line_intersection(node.data[0],node.data[1]),(node.data[0],node.data[1]))
+                    print("intersect pred")
+                    
+            # Successor :: should we the Q and T's be switched, I switched it as I saw our T tree was empty
+            # Q and T's be switched, I switched it as I saw our T tree was empty
+            #  but the pseudo code has it but the pseudo code has it
+            #  switched.
+            # What should the node be??? I am using the smallest from the Q.
+            succ = T.successor(node)
+            if succ:
+                # if intersect(p1, p2, p3, p4)
+                # need the succ and the pred for above, so then we can. Then we need to send an event through the insert segment
+                # if intersect(node[0],node[1],succ[0],succ[1]):
+                # if intersect(node.data[0],node.data[1],succ.data[0],succ.data[1]):
+                if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+                    # Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                    # Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label))
+                    Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,None,None,event.label,((event.x,event.y),event.other_end)))
+                    
+                    intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
+                    
+                    intersections.append((intersectPoint[0],intersectPoint[1]))
+                    # point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
+                    # intersections.append(point)
+                    # intersections.append(line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1]))
+                    # intersections = line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1])
+                #         Q.insert(int.pt,Event(...))
+                #         insert_segment(label, segment) So the label is somewhat like a key.
+                #  THE KEY IS THE VALUE IN THE NODE! I THINK
+                    print("intersect succ")
+                        # Q.insert_segment(line_intersection((node.data.x,node.data.y),holdNode.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end),event)
+
+        elif not event.is_intersection:
+            
+            
+            node = T.searchx(event.label, ((event.x,event.y),event.other_end), event.x)
+            # node = T.search(s[event])
+            pred = T.predecessor(node)
+            succ = T.successor(node)
+            if pred and succ:
+                if intersect(pred[0],pred[1],succ[0],succ[1]):
+                    # Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                    Q.insert_segment(event.label,Event(event.x, event.y, False, False))                       
+            try:
                 T.delete(node)
-                
-                
-                print("right event")
-            # *** need to implement ***
+            except:
+                print("idk")
+            
+            print("right event")
+        # *** need to implement ***
 
-            else:
-                # T.append(x,y) or is it I.append(x,y)
-                # n1 = t.search(seg1) n2 = t.search(seg2)
-                intersections.append((event.x,event.y))
-                print("ddd")
-                n1 = T.searchx(event.label, ((event.x,event.y),event.other_end),event.x)
-                n2 = T.searchx(node.key,node.data,node)
-                
+        else:
+            # T.append(x,y) or is it I.append(x,y)
+            # n1 = t.search(seg1) n2 = t.search(seg2)
+            intersections.append((event.x,event.y))
+            print("ddd")
+            n1 = T.searchx(event.plabel,event.psegment,event.x)
+            n2 = T.searchx(event.slabel,event.ssegment,event.x)
+            
 
-                print("test")
-                
-                # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
-                # where we intersect.
-                T.swap(n1,n2,event.data.x)
-                pred = T.predecessor(n1)
-                succ = T.successor(n2)
-                if pred:
-                    if intersect(pred[0], pred[1], succ[0], succ[1]):
-                        Q.insert_segment(event.label,(n1.data[0],n1.data[1]))
-                        # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+            print("test")
+            
+            # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
+            # where we intersect.
+            T.swap(n1,n2,event.x)
+            pred = T.predecessor(n1)
+            succ = T.successor(n2)
+            if pred:
+                if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
+                    Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
+                    # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+                    try:
                         T.delete(n1)
-                if succ:
-                    if intersect(pred[0], pred[1], succ[0], succ[1]):
-                        Q.insert_segment(event.label,(n2.data[0],n2.data[1]))
-                        # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
-                        T.delete(n2)
-                print("intersection event")
-        # cnt = cnt + 1
-	    # *** need to implement ***
-        except:
-            print(".is_left does not exist")  
+                    except:
+                        print("well")
+            if succ:
+                if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
+                    Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,event.label,None,None,((event.x,event.y),event.other_end)))
+                    # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+                    # event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end))
+                try:
+                    T.delete(n2)
+                except:
+                    print("hmmm")
+            print("intersection event")
+    # cnt = cnt + 1
+    # *** need to implement ***  
+    count = 0
+    for i in intersections:
+        intersectPts.append(i)
+        count = count + 1
+        drawPoint(i)
+    print(intersectPts)
     print(intersections)
+    
+    
 
 
 def drawSegments(S):
@@ -283,4 +309,8 @@ S = [((210,530),(900,400)), ((90,50),(850,200)),((80,200),(900,400)),((100,500),
 print(S)
 drawSegments(S)
 
+
+# drawPoint((100,100))
 root.mainloop()
+
+
