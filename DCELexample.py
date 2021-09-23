@@ -210,7 +210,7 @@ def find_inters(S):
             if pred and succ:
                 if intersect((pred.data.x,pred.data.y),pred.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
                     # Q.insert_segment(event.label,(node.data[0],node.data[1]))
-                    Q.insert_segment(event.label,Event(event.x, event.y, False, False))                       
+                    Q.insert_segment(event.x,Event(event.x, event.y, False, False,event.other_end))                       
             try:
                 T.delete(node)
             except:
