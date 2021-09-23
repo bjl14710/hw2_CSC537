@@ -56,27 +56,44 @@ def intersect(p1, p2, p3, p4):
     # 
     # Is this the code for when we hit an intersection?
     # or for finding it?   
-    A1 = p2[1]-p1[1]
-    B1 = p1[0]-p2[0]
-    A2 = p4[1]-p3[1]
-    B2 = p3[0]-p4[0]
-    C1 = A1*p1[0] + B1*p1[1]
-    C2 = A2*p2[0] + B2*p2[1]
+#     A1 = p2[1]-p1[1]
+#     B1 = p1[0]-p2[0]
+#     A2 = p4[1]-p3[1]
+#     B2 = p3[0]-p4[0]
+#     C1 = A1*p1[0] + B1*p1[1]
+#     C2 = A2*p2[0] + B2*p2[1]
+
+    
+#     det = A1*B2 - A2*B1
+#     if det == 0:
+#         return None
+#     # C = Ax1+By1
+    
 
 
-    det = A1*B2 - A2*B1
-    if det == 0:
-        return None
-    # C = Ax1+By1
+# # (B2 * C1 - B1 * C2) / det
+# #   double y = (A1 * C2 - A2 * C1) / det
+#     x = (B2 * C1 - B1 * C2) / det
+#     y = (A1 * C2 - A2 * C1) / det
+
+#     return x,y
 
 
+    xdiff = (p1[0] - p2[0], p3[0] - p4[0])
+    ydiff = (p1[1] - p2[1], p3[1] - p4[1])
 
-# (B2 * C1 - B1 * C2) / det
-#   double y = (A1 * C2 - A2 * C1) / det
-    x = (B2 * C1 - B1 * C2) / det
-    y = (A1 * C2 - A2 * C1) / det
+    def det(a, b):
+        return a[0] * b[1] - a[1] * b[0]
 
-    return x,y
+    div = det(xdiff, ydiff)
+    if div == 0:
+       return None
+
+    d = (det(*(p1,p2)), det(*(p3,p4)))
+    x = det(d, xdiff) / div
+    y = det(d, ydiff) / div
+    return x, y
+
     
     
     
