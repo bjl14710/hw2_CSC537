@@ -169,11 +169,13 @@ def find_intersections(event):
                     # This is different than the pseudo code so need to take a look at it later.
                     # need the predecessor for the S[cnt+1] segment. pred is a node, so how do I get the semgents?
                     if intersect(node.data[0],node.data[1],pred.data[0],pred.data[1]):
-                        Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                        # Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                        Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label))
+                        
                         # intersections.append(line_intersection(node.data[0],node.data[1]),(pred.data[0],pred.data[1]))
-                        point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
+                        # point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
                          
-                        intersections.append(point)
+                        # intersections.append(point)
                         
                         # Q.insert_segment(line_intersection(node.data[0],node.data[1]),(node.data[0],node.data[1]))
                         print("intersect pred")
@@ -189,9 +191,11 @@ def find_intersections(event):
                     # need the succ and the pred for above, so then we can. Then we need to send an event through the insert segment
                     # if intersect(node[0],node[1],succ[0],succ[1]):
                     if intersect(node.data[0],node.data[1],succ.data[0],succ.data[1]):
-                        Q.insert_segment(event.label,(node.data[0],node.data[1]))
-                        point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
-                        intersections.append(point)
+                        # Q.insert_segment(event.label,(node.data[0],node.data[1]))
+                        Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label))
+                        
+                        # point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
+                        # intersections.append(point)
                         # intersections.append(line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1]))
                         # intersections = line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1])
                     #         Q.insert(int.pt,Event(...))
@@ -219,7 +223,7 @@ def find_intersections(event):
             else:
                 # T.append(x,y) or is it I.append(x,y)
                 # n1 = t.search(seg1) n2 = t.search(seg2)
-                # T.append(event[0],event[1])
+                intersections.append((event.x,event.y))
                 print("ddd")
                 n1 = T.searchx(event.label, ((event.x,event.y),event.other_end),event.x)
                 n2 = T.searchx(node.key,node.data,node)
@@ -235,12 +239,12 @@ def find_intersections(event):
                 if pred:
                     if intersect(pred[0], pred[1], succ[0], succ[1]):
                         Q.insert_segment(event.label,(n1.data[0],n1.data[1]))
-                        intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+                        # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
                         T.delete(n1)
                 if succ:
                     if intersect(pred[0], pred[1], succ[0], succ[1]):
                         Q.insert_segment(event.label,(n2.data[0],n2.data[1]))
-                        intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+                        # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
                         T.delete(n2)
                 print("intersection event")
         # cnt = cnt + 1

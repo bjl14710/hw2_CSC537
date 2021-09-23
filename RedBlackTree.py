@@ -193,13 +193,23 @@ class RedBlackTree:
     x = self.root
     # *** need to implement ***
     # fn used to search for a segment (data)
+    # if x is None: x = self.root
+    # while data and not(x.right.right == None or x.left.left == None):# and x.key != key:
+    #   if Above(data,x.data,xcoord) < 0:
+    #     x = x.right
+    #   elif Above(data,x.data,xcoord) > 0:
+    #     x = x.left
+    # return x
+
     if x is None: x = self.root
-    while data[0] and not(x.right.right == None or x.left.left == None):# and x.key != key:
-      if Above(data[0],data[1],xcoord) < 0:
-        x = x.right
-      elif Above(data[0],data[1],xcoord) > 0:
+    while x:# and x.key != key:
+      if key < x.key:
         x = x.left
+      else:
+        x = x.right
     return x
+
+
     
 
   def swap(self, nn1, nn2, x):      
@@ -217,6 +227,8 @@ class RedBlackTree:
     # fn used to insert a segment into the tree
     
     # need to compare with the x? Is x the key? what is the key?
+
+
     x = Node(label, segment)
 
     self.__insert_helperx(x)
