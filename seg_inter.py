@@ -56,46 +56,73 @@ def intersect(p1, p2, p3, p4):
     # 
     # Is this the code for when we hit an intersection?
     # or for finding it?   
-    dir1 = direction(p1, p2, p3)
-    dir2 = direction(p1, p2, p4)
-    dir3 = direction(p3, p4, p1)
-    dir4 = direction(p3, p4, p2)
+    A1 = p2[1]-p1[1]
+    B1 = p1[0]-p2[0]
+    A2 = p4[1]-p3[1]
+    B2 = p3[0]-p4[0]
+    C1 = A1*p1[0] + B1*p1[1]
+    C2 = A2*p2[0] + B2*p2[1]
 
-    if not (dir1 == dir2) and (not(dir3 == dir4)):
-        return True
-    elif dir1 == 0 and onLine(p1, p2, p3):
-        return True
-    elif dir2 == 0 and onLine(p1, p2, p4):
-        return True
-    elif dir3 == 0 and onLine(p3, p4, p1):
-        return True
-    elif dir4 == 0 and onLine(p3, p4, p2):
-        return True
 
-    return False           
+    det = A1*B2 - A2*B1
 
-cnt = 0
+    # C = Ax1+By1
+
+
+
+# (B2 * C1 - B1 * C2) / det
+#   double y = (A1 * C2 - A2 * C1) / det
+    x = (B2 * C1 - B1 * C2) / det
+    y = (A1 * C2 - A2 * C1) / det
+
+    return x,y
+    
+    
+    
+    # dir1 = direction(p1, p2, p3)
+    # dir2 = direction(p1, p2, p4)
+    # dir3 = direction(p3, p4, p1)
+    # dir4 = direction(p3, p4, p2)
+
+    # if not (dir1 == dir2) and (not(dir3 == dir4)):
+    #     return True
+    # elif dir1 == 0 and onLine(p1, p2, p3):
+    #     return True
+    # elif dir2 == 0 and onLine(p1, p2, p4):
+    #     return True
+    # elif dir3 == 0 and onLine(p3, p4, p1):
+    #     return True
+    # elif dir4 == 0 and onLine(p3, p4, p2):
+    #     return True
+
+    # return False           
+
 #-----------------------------------------------------------------
 # find_intersections callback
 #-----------------------------------------------------------------
 
-def line_intersection(line1, line2):
-    xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
-    ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
+# def line_intersection(line1, line2):
+#     xdiff = (line1[0][0] - line1[1][0], line2[0][0] - line2[1][0])
+#     ydiff = (line1[0][1] - line1[1][1], line2[0][1] - line2[1][1])
 
-    def det(a, b):
-        return a[0] * b[1] - a[1] * b[0]
+#     def det(a, b):
+#         return a[0] * b[1] - a[1] * b[0]
 
-    div = det(xdiff, ydiff)
-    if div == 0:
-       raise Exception('lines do not intersect')
+#     div = det(xdiff, ydiff)
+#     if div == 0:
+#        raise Exception('lines do not intersect')
 
-    d = (det(*line1), det(*line2))
-    x = det(d, xdiff) / div
-    y = det(d, ydiff) / div
-    return x, y
+#     d = (det(*line1), det(*line2))
+#     x = det(d, xdiff) / div
+#     y = det(d, ydiff) / div
+#     return (x, y)
 
-    
+
+
+
+
+ 
+
 def find_intersections(event):
     global S
     global cnt
@@ -112,7 +139,7 @@ def find_intersections(event):
     T = RedBlackTree()
     
     intersections = []
-    
+    cnt = 0
     while not Q.is_empty():
         min_node = Q.minimum()
         event = min_node.data
@@ -143,9 +170,14 @@ def find_intersections(event):
                     # need the predecessor for the S[cnt+1] segment. pred is a node, so how do I get the semgents?
                     if intersect(node.data[0],node.data[1],pred.data[0],pred.data[1]):
                         Q.insert_segment(event.label,(node.data[0],node.data[1]))
-                        intersections.append(line_intersection(node.data[0],node.data[1]),(pred.data[0],pred.data[1]))
+                        # intersections.append(line_intersection(node.data[0],node.data[1]),(pred.data[0],pred.data[1]))
+                        point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
+                         
+                        intersections.append(point)
+                        
                         # Q.insert_segment(line_intersection(node.data[0],node.data[1]),(node.data[0],node.data[1]))
                         print("intersect pred")
+                        
                 # Successor :: should we the Q and T's be switched, I switched it as I saw our T tree was empty
                 # Q and T's be switched, I switched it as I saw our T tree was empty
                 #  but the pseudo code has it but the pseudo code has it
@@ -158,7 +190,10 @@ def find_intersections(event):
                     # if intersect(node[0],node[1],succ[0],succ[1]):
                     if intersect(node.data[0],node.data[1],succ.data[0],succ.data[1]):
                         Q.insert_segment(event.label,(node.data[0],node.data[1]))
-                        intersections.append(line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1]))
+                        point = intersect(node.data[0],node.data[1],succ.data[0],succ.data[1])
+                        intersections.append(point)
+                        # intersections.append(line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1]))
+                        # intersections = line_intersection(node.data[0],node.data[1]),(succ.data[0],succ.data[1])
                     #         Q.insert(int.pt,Event(...))
                     #         insert_segment(label, segment) So the label is somewhat like a key.
                     #  THE KEY IS THE VALUE IN THE NODE! I THINK
@@ -184,12 +219,13 @@ def find_intersections(event):
             else:
                 # T.append(x,y) or is it I.append(x,y)
                 # n1 = t.search(seg1) n2 = t.search(seg2)
-                T.append(event[0],event[1])
-                n1 = T.searchx(event.label, ((event.x,event.y),event.other_end))
-                n2 = T.searchx(node.key,node.data)
+                # T.append(event[0],event[1])
+                print("ddd")
+                n1 = T.searchx(event.label, ((event.x,event.y),event.other_end),event.x)
+                n2 = T.searchx(node.key,node.data,node)
                 
 
-                
+                print("test")
                 
                 # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
                 # where we intersect.
@@ -199,12 +235,12 @@ def find_intersections(event):
                 if pred:
                     if intersect(pred[0], pred[1], succ[0], succ[1]):
                         Q.insert_segment(event.label,(n1.data[0],n1.data[1]))
-                        intersections.append(line_intersection(pred[0], pred[1]), (succ[0], succ[1]))
+                        intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
                         T.delete(n1)
                 if succ:
                     if intersect(pred[0], pred[1], succ[0], succ[1]):
                         Q.insert_segment(event.label,(n2.data[0],n2.data[1]))
-                        intersections.append(line_intersection(pred[0], pred[1]), (succ[0], succ[1]))
+                        intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
                         T.delete(n2)
                 print("intersection event")
         # cnt = cnt + 1
@@ -237,8 +273,8 @@ canvas = Canvas(root, width=YSIZE, height=YSIZE, bg='#FFF', highlightbackground=
 canvas.bind("<Button-1>", find_intersections)
 canvas.grid(row=0, column=0)
 
-#S = [((20,50),(900,400)), ((80,500),(850,200))]
-S = [((random.randint(100, 900), random.randint(100, 900)),(random.randint(100, 900), random.randint(100, 900))) for _ in range(10)]
+S = [((210,530),(900,400)), ((90,50),(850,200)),((80,200),(900,400)),((100,500),(920,200)),((82,300),(150,220))]
+# S = [((random.randint(100, 900), random.randint(100, 900)),(random.randint(100, 900), random.randint(100, 900))) for _ in range(10)]
 
 print(S)
 drawSegments(S)

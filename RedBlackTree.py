@@ -162,15 +162,31 @@ class RedBlackTree:
     
 # *** extra functions for segments
     
+  def slopeOf(self, s):
+    return (s[1][1]-s[0][1])/(s[1][0]-s[0][0])
+
+  def lineValue(self,m,pt,x):
+    b = pt[1]-m*pt[0]
+    y = m*x+b
+    return y
+
   def Above(self, s1, s2, x):
     # *** need to implement ***
     # fn used in searchx
     # self balance by x 
-
+    slope1 = slopeOf(s1)
+    slope2 = slopeOf(s2)
+    if x > min(s1[0][0],s2[0][0]) and x < max(s1[0][0],s2[0][0]):
+      print("case met")
+      #s1 bigger than s2
+      if lineValue(slope1,s1[0],s1[0][0]) > lineValue(slope2,s2[0],s2[0][0]):
+        return 1
+      elif lineValue(slope2,s2[0],s2[0][0]) > lineValue(slope1,s1[0],s1[0][0]):
+        return -1
+      else:
+        return 0
     # if s1 is higher than s2 than that is the above segment. 
-    if s1[0][1] < s2[0][1]:
-      self.s1 = self.s2
-    return self.s1
+    
     # return False
 
   def searchx(self, key, data, xcoord):
@@ -179,10 +195,10 @@ class RedBlackTree:
     # fn used to search for a segment (data)
     if x is None: x = self.root
     while data[0] and not(x.right.right == None or x.left.left == None):# and x.key != key:
-      if  x.data[0][0] < xcoord and x.left.left != None:
-        x = x.left
-      else:
+      if Above(data[0],data[1],xcoord) < 0:
         x = x.right
+      elif Above(data[0],data[1],xcoord) > 0:
+        x = x.left
     return x
     
 
