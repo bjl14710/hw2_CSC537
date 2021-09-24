@@ -51,30 +51,50 @@ def direction(p1,p2,p3):
         #clockwise
         return 1
 
+def find_B(p1,m):
+    # y-mx
+    return (p1[1]-p1[0]*m)
+    
+def slopeOf(s):
+    return (s[1][1]-s[0][1])/(s[1][0]-s[0][0])
+
+
+
 def intersect(p1, p2, p3, p4):
     # *** need to implement *** 
     # 
     # Is this the code for when we hit an intersection?
     # or for finding it?   
-    A1 = p2[1]-p1[1]
-    B1 = p1[0]-p2[0]
-    A2 = p4[1]-p3[1]
-    B2 = p3[0]-p4[0]
-    C1 = A1*p1[0] + B1*p1[1]
-    C2 = A2*p2[0] + B2*p2[1]
+#     A1 = p2[1]-p1[1]
+#     B1 = p1[0]-p2[0]
+#     A2 = p4[1]-p3[1]
+#     B2 = p3[0]-p4[0]
+#     C1 = A1*p1[0] + B1*p1[1]
+#     C2 = A2*p2[0] + B2*p2[1]
 
     
-    det = A1*B2 - A2*B1
-    if det == 0:
-        return None
-    # C = Ax1+By1
+#     det = A1*B2 - A2*B1
+#     if det == 0:
+#         return None
+#     # C = Ax1+By1
     
 
 
-# (B2 * C1 - B1 * C2) / det
-#   double y = (A1 * C2 - A2 * C1) / det
-    x = (B2 * C1 - B1 * C2) / det
-    y = (A1 * C2 - A2 * C1) / det
+# # (B2 * C1 - B1 * C2) / det
+# #   double y = (A1 * C2 - A2 * C1) / det
+#     x = (B2 * C1 - B1 * C2) / det
+#     y = (A1 * C2 - A2 * C1) / det
+
+    m1 = slopeOf((p1,p2))
+    m2 = slopeOf((p3,p4))
+
+    B1 = find_B(p1, m1)
+    B2 = find_B(p3, m2)
+
+    # from https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+    # a = m1, b = m2, c = B1, d = B2
+    x = (B2-B1)/(m1-m2)
+    y = m1*((B2-B1)/(m1-m2))+B1
 
     return x,y
 
@@ -324,7 +344,7 @@ canvas = Canvas(root, width=YSIZE, height=YSIZE, bg='#FFF', highlightbackground=
 canvas.bind("<Button-1>", find_intersections)
 canvas.grid(row=0, column=0)
 
-S = [((210,530),(900,400)), ((90,50),(850,200)),((80,200),(900,400)),((100,500),(920,200)),((82,300),(150,220))]
+S = [((210,530),(900,450)), ((90,50),(850,200)),((80,200),(900,400)),((100,500),(920,200)),((82,300),(150,220))]
 # S = [((random.randint(100, 900), random.randint(100, 900)),(random.randint(100, 900), random.randint(100, 900))) for _ in range(10)]
 
 print(S)
