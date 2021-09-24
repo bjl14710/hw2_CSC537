@@ -82,13 +82,17 @@ def line_intersect(Ax1, Ay1, Ax2, Ay2, Bx1, By1, Bx2, By2):
 
 def find_B(p1,m):
     # y-mx
+    if m is None:
+        return 
     return (p1[1]-p1[0]*m)
     
 def slopeOf(s):
+    if (s[1][0]-s[0][0]) == 0:
+        return 
     return (s[1][1]-s[0][1])/(s[1][0]-s[0][0])
 
 ####
-def intersect(p1, p2, p3, p4):
+def intersect(p1, p2, p3, p4, xlow, xhigh):
     # *** need to implement *** 
     # 
     # Is this the code for when we hit an intersection?
@@ -99,12 +103,126 @@ def intersect(p1, p2, p3, p4):
     B1 = find_B(p1, m1)
     B2 = find_B(p3, m2)
 
+    if m1 == None or m2 == None or B1 == None or B2 == None:
+        return 
     # from https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
     # a = m1, b = m2, c = B1, d = B2
+    if(m1-m2 == 0):
+        return 
     x = (B2-B1)/(m1-m2)
     y = m1*((B2-B1)/(m1-m2))+B1
+    if x < xhigh and x>xlow:
+        return x,y
+    return
 
-    return x,y
+
+# def find_inters(S):
+#     print("find_inters")  # code from Q1
+#     Q = RedBlackTree()
+#     label = 0
+#     for s in S:
+#         if s[0][0] > s[1][0]:
+#             S[label] = (s[1],s[0])
+#             s = S[label]
+#         Q.insert(s[0][0], Event(s[0][0], s[0][1], True, False, s[1], label))
+#         Q.insert(s[1][0], Event(s[1][0], s[1][1], False, False, s[0], label))
+#         label += 1
+  
+#     T = RedBlackTree()
+    
+#     intersections = []
+#     cnt = 0
+#     while not Q.is_empty():
+#         min_node = Q.minimum()
+#         event = min_node.data
+#         Q.delete(min_node)
+#         if event.is_left:
+#             print("left event")
+#             node = T.insert_segment(event.label, Event(event.x, event.y, False, False, event.other_end, event.label))
+#             pred = T.predecessor(node)
+#             # x, y, is_left=True, is_intersection=False, other_end=None, label=None, pl=None, ps=None, sl = None, ss=None
+#             if pred:
+#                 if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end):
+                    
+#                     intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end)
+#                     Q.insert_segment(node.data.label,Event(intersectPoint[0], intersectPoint[1], False, True,pred.data.other_end, pred.data.label,pred.data.label,((node.data.x, node.data.y),(intersectPoint[0],intersectPoint[1])),event.label,((event.x,event.y),event.other_end)))
+                    
+#                     intersections.append((intersectPoint[0],intersectPoint[1]))
+                    
+
+#                     print("intersect pred")
+                    
+#             succ = T.successor(node)
+#             if succ:
+#               if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+#                     #  Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,None,None,event.label,((event.x,event.y),event.other_end)))
+                    
+#                     #  intersectPoint = intersect((event.x,event.y),event.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
+#                      intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
+#                      Q.insert_segment(node.data.label,Event(intersectPoint[0], intersectPoint[1], False, True, succ.data.other_end, succ.data.label,event.label,((event.x,event.y),event.other_end)), succ.data.label,((node.data.x, node.data.y),(intersectPoint[0],intersectPoint[1])))
+                    
+
+
+#                      intersections.append((intersectPoint[0],intersectPoint[1]))
+#                      print("intersect succ")
+                        
+#         elif not event.is_intersection:
+            
+            
+#             node = T.searchx(event.label, ((event.x,event.y),event.other_end), event.x)
+#             pred = T.predecessor(node)
+#             succ = T.successor(node)
+#             if pred and succ:
+#                 if intersect((pred.data.x,pred.data.y),pred.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+#                     Q.insert_segment(event.x,Event(event.x, event.y, False, False,event.other_end))                       
+#             try:
+#                 T.delete(node)
+#             except:
+#                 print("idk")
+            
+#             print("right event")
+#         # *** need to implement ***
+
+#         else:
+#             intersections.append((event.x,event.y))
+#             print("ddd")
+#             n1 = T.searchx(event.plabel,event.psegment,event.x)
+#             n2 = T.searchx(event.slabel,event.ssegment,event.x)
+            
+
+#             print("test")
+            
+#             # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
+#             # where we intersect.
+#             T.swap(n1,n2,event.x)
+#             pred = T.predecessor(n1)
+#             succ = T.successor(n2)
+#             if pred:
+#                 if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
+#                     Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
+#                     intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+#                     try:
+#                         T.delete(n1)
+#                     except:
+#                         print("well")
+#             if succ:
+#                 if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
+#                     Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,event.label,None,None,((event.x,event.y),event.other_end)))
+#                     intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+#                     # event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end))
+#                 try:
+#                     T.delete(n2)
+#                 except:
+#                     print("hmmm")
+#             print("intersection event")
+#     # cnt = cnt + 1
+#     # *** need to implement ***  
+#     count = 0
+#     for i in intersections:
+#         count = count + 1
+#         drawPoint(i)
+#     print(intersections)
+    
 
 
 def find_inters(S):
@@ -118,97 +236,113 @@ def find_inters(S):
         Q.insert(s[0][0], Event(s[0][0], s[0][1], True, False, s[1], label))
         Q.insert(s[1][0], Event(s[1][0], s[1][1], False, False, s[0], label))
         label += 1
-  
-    T = RedBlackTree()
+    
+    
     
     intersections = []
-    cnt = 0
-    while not Q.is_empty():
-        min_node = Q.minimum()
-        event = min_node.data
-        Q.delete(min_node)
-        if event.is_left:
-            print("left event")
-            node = T.insert_segment(event.label, Event(event.x, event.y, False, False, event.other_end, event.label))
-            pred = T.predecessor(node)
-            if pred:
-                if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end):
-                    Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
-                    
-                    # intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end)
-                    
-                    # intersections.append((intersectPoint[0],intersectPoint[1]))
-                    
-
-                    print("intersect pred")
-                    
-            succ = T.successor(node)
-            if succ:
-              if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
-                     Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,None,None,event.label,((event.x,event.y),event.other_end)))
-                    
-                    #  intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
-                    
-                    #  intersections.append((intersectPoint[0],intersectPoint[1]))
-                     print("intersect succ")
-                        
-        elif not event.is_intersection:
-            
-            
-            node = T.searchx(event.label, ((event.x,event.y),event.other_end), event.x)
-            pred = T.predecessor(node)
-            succ = T.successor(node)
-            if pred and succ:
-                if intersect((pred.data.x,pred.data.y),pred.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
-                    Q.insert_segment(event.x,Event(event.x, event.y, False, False,event.other_end))                       
-            try:
-                T.delete(node)
-            except:
-                print("idk")
-            
-            print("right event")
-        # *** need to implement ***
-
-        else:
-            intersections.append((event.x,event.y))
-            print("ddd")
-            n1 = T.searchx(event.plabel,event.psegment,event.x)
-            n2 = T.searchx(event.slabel,event.ssegment,event.x)
-            
-
-            print("test")
-            
-            # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
-            # where we intersect.
-            T.swap(n1,n2,event.x)
-            pred = T.predecessor(n1)
-            succ = T.successor(n2)
-            if pred:
-                if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
-                    Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
-                    # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
-                    try:
-                        T.delete(n1)
-                    except:
-                        print("well")
-            if succ:
-                if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
-                    Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,event.label,None,None,((event.x,event.y),event.other_end)))
-                    # intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
-                    # event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end))
-                try:
-                    T.delete(n2)
-                except:
-                    print("hmmm")
-            print("intersection event")
-    # cnt = cnt + 1
-    # *** need to implement ***  
-    count = 0
-    for i in intersections:
-        count = count + 1
-        drawPoint(i)
-    print(intersections)
     
+    for s in S:
+        for j in S:
+            if not intersect(s[0], s[1], j[0], j[1],min(s[0][0], s[1][0], j[0][0], j[1][0]),
+                max(s[0][0], s[1][0], j[0][0], j[1][0])) == None:
+                intersections.append(intersect(s[0], s[1], j[0], j[1],min(s[0][0], s[1][0], j[0][0], j[1][0]),
+                max(s[0][0], s[1][0], j[0][0], j[1][0])))
+    T = RedBlackTree()
+
+    for i in range(len(intersections)):
+        drawPoint(intersections[i])
+    
+    cnt = 0
+    # while not Q.is_empty():
+    #     min_node = Q.minimum()
+    #     event = min_node.data
+    #     Q.delete(min_node)
+    #     if event.is_left:
+    #         print("left event")
+    #         node = T.insert_segment(event.label, Event(event.x, event.y, False, False, event.other_end, event.label))
+    #         pred = T.predecessor(node)
+    #         # x, y, is_left=True, is_intersection=False, other_end=None, label=None, pl=None, ps=None, sl = None, ss=None
+    #         if pred:
+    #             if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end):
+                    
+    #                 intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end)
+    #                 Q.insert_segment(node.data.label,Event(intersectPoint[0], intersectPoint[1], False, True,pred.data.other_end, pred.data.label,pred.data.label,((node.data.x, node.data.y),(intersectPoint[0],intersectPoint[1])),event.label,((event.x,event.y),event.other_end)))
+                    
+    #                 intersections.append((intersectPoint[0],intersectPoint[1]))
+                    
+
+    #                 print("intersect pred")
+                    
+    #         succ = T.successor(node)
+    #         if succ:
+    #           if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+    #                 #  Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,None,None,event.label,((event.x,event.y),event.other_end)))
+                    
+    #                 #  intersectPoint = intersect((event.x,event.y),event.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
+    #                  intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
+    #                  Q.insert_segment(node.data.label,Event(intersectPoint[0], intersectPoint[1], False, True, succ.data.other_end, succ.data.label,event.label,((event.x,event.y),event.other_end)), succ.data.label,((node.data.x, node.data.y),(intersectPoint[0],intersectPoint[1])))
+                    
+
+
+    #                  intersections.append((intersectPoint[0],intersectPoint[1]))
+    #                  print("intersect succ")
+                        
+    #     elif not event.is_intersection:
+            
+            
+    #         node = T.searchx(event.label, ((event.x,event.y),event.other_end), event.x)
+    #         pred = T.predecessor(node)
+    #         succ = T.successor(node)
+    #         if pred and succ:
+    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+    #                 Q.insert_segment(event.x,Event(event.x, event.y, False, False,event.other_end))                       
+    #         try:
+    #             T.delete(node)
+    #         except:
+    #             print("idk")
+            
+    #         print("right event")
+    #     # *** need to implement ***
+
+    #     else:
+    #         intersections.append((event.x,event.y))
+    #         print("ddd")
+    #         n1 = T.searchx(event.plabel,event.psegment,event.x)
+    #         n2 = T.searchx(event.slabel,event.ssegment,event.x)
+            
+
+    #         print("test")
+            
+    #         # T.swap(self,nn1,nn2,x) is x event[0]. Since that is the point
+    #         # where we intersect.
+    #         T.swap(n1,n2,event.x)
+    #         pred = T.predecessor(n1)
+    #         succ = T.successor(n2)
+    #         if pred:
+    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
+    #                 Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
+    #                 intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+    #                 try:
+    #                     T.delete(n1)
+    #                 except:
+    #                     print("well")
+    #         if succ:
+    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
+    #                 Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,event.label,None,None,((event.x,event.y),event.other_end)))
+    #                 intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+    #                 # event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end))
+    #             try:
+    #                 T.delete(n2)
+    #             except:
+    #                 print("hmmm")
+    #         print("intersection event")
+    # # cnt = cnt + 1
+    # # *** need to implement ***  
+    # count = 0
+    # for i in intersections:
+    #     count = count + 1
+    #     drawPoint(i)
+    # print(intersections)
 
 #####
     
