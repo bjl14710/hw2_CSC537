@@ -200,10 +200,10 @@ class RedBlackTree:
     #   elif Above(data,x.data,xcoord) > 0:
     #     x = x.left
     # return x
-
+  
     if x is None: x = self.root
     if key is None: return x
-    while x:# and x.key != key:
+    while x :# and x.key != key:
       if key < x.key:
         x = x.left
       else:
@@ -221,7 +221,7 @@ class RedBlackTree:
     # print('nn1 ', nn1.key)
     # print('nn2 ', nn2.key)
     
-    tmp = Node(0)
+    tmp = Node(0) 
     if nn1.key is None:
       tmp.key = None
       # if not (nn1.data is None):

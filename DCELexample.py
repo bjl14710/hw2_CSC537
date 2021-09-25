@@ -252,7 +252,7 @@ def find_inters(S):
     for i in range(len(intersections)):
         drawPoint(intersections[i])
     
-    cnt = 0
+    # cnt = 0
     # while not Q.is_empty():
     #     min_node = Q.minimum()
     #     event = min_node.data
@@ -263,9 +263,13 @@ def find_inters(S):
     #         pred = T.predecessor(node)
     #         # x, y, is_left=True, is_intersection=False, other_end=None, label=None, pl=None, ps=None, sl = None, ss=None
     #         if pred:
-    #             if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end):
+    #             if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end,
+    #                         min(node.data.x,node.data.other_end[0], pred.data.x, pred.data.other_end[0]),
+    #                         max(node.data.x,node.data.other_end[0], pred.data.x, pred.data.other_end[0])):
                     
-    #                 intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end)
+    #                 intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end,
+    #                 min(node.data.x,node.data.other_end[0], pred.data.x, pred.data.other_end[0]),
+    #                 max(node.data.x,node.data.other_end[0], pred.data.x, pred.data.other_end[0]))
     #                 Q.insert_segment(node.data.label,Event(intersectPoint[0], intersectPoint[1], False, True,pred.data.other_end, pred.data.label,pred.data.label,((node.data.x, node.data.y),(intersectPoint[0],intersectPoint[1])),event.label,((event.x,event.y),event.other_end)))
                     
     #                 intersections.append((intersectPoint[0],intersectPoint[1]))
@@ -275,11 +279,15 @@ def find_inters(S):
                     
     #         succ = T.successor(node)
     #         if succ:
-    #           if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+    #           if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end,
+    #                         min(node.data.x,node.data.other_end[0], succ.data.x, succ.data.other_end[0]),
+    #                         max(node.data.x,node.data.other_end[0], succ.data.x, succ.data.other_end[0])):
     #                 #  Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,None,None,event.label,((event.x,event.y),event.other_end)))
                     
     #                 #  intersectPoint = intersect((event.x,event.y),event.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
-    #                  intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end)
+    #                  intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end,
+    #                  min(node.data.x,node.data.other_end[0], succ.data.x, succ.data.other_end[0]),
+    #                  max(node.data.x,node.data.other_end[0], succ.data.x, succ.data.other_end[0]))
     #                  Q.insert_segment(node.data.label,Event(intersectPoint[0], intersectPoint[1], False, True, succ.data.other_end, succ.data.label,event.label,((event.x,event.y),event.other_end)), succ.data.label,((node.data.x, node.data.y),(intersectPoint[0],intersectPoint[1])))
                     
 
@@ -294,7 +302,9 @@ def find_inters(S):
     #         pred = T.predecessor(node)
     #         succ = T.successor(node)
     #         if pred and succ:
-    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
+    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end,
+    #                         min(pred.data.x,pred.data.other_end[0], succ.data.x, succ.data.other_end[0]),
+    #                         max(pred.data.x,pred.data.other_end[0], succ.data.x, succ.data.other_end[0])):
     #                 Q.insert_segment(event.x,Event(event.x, event.y, False, False,event.other_end))                       
     #         try:
     #             T.delete(node)
@@ -306,7 +316,6 @@ def find_inters(S):
 
     #     else:
     #         intersections.append((event.x,event.y))
-    #         print("ddd")
     #         n1 = T.searchx(event.plabel,event.psegment,event.x)
     #         n2 = T.searchx(event.slabel,event.ssegment,event.x)
             
@@ -318,24 +327,31 @@ def find_inters(S):
     #         T.swap(n1,n2,event.x)
     #         pred = T.predecessor(n1)
     #         succ = T.successor(n2)
-    #         if pred:
-    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
-    #                 Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
-    #                 intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+    #         try:
+    #             if pred:
+    #                 if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end,
+    #                             min(pred.data.x,pred.data.other_end[0], succ.data.x, succ.data.other_end[0]),
+    #                             max(pred.data.x,pred.data.other_end[0], succ.data.x, succ.data.other_end[0])):
+    #                     Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
+    #                     intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+    #                     try:
+    #                         T.delete(n1)
+    #                     except:
+    #                         print("well")
+    #             if succ:
+    #                 if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end,
+    #                             min(pred.data.x,pred.data.other_end[0], succ.data.x, succ.data.other_end[0]),
+    #                             max(pred.data.x,pred.data.other_end[0], succ.data.x, succ.data.other_end[0])):
+    #                     Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,event.label,None,None,((event.x,event.y),event.other_end)))
+    #                     intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
+    #                     # event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end))
     #                 try:
-    #                     T.delete(n1)
+    #                     T.delete(n2)
     #                 except:
-    #                     print("well")
-    #         if succ:
-    #             if intersect((pred.data.x,pred.data.y),pred.data.other_end, (succ.data.x,succ.data.y),succ.data.other_end):
-    #                 Q.insert_segment(event.label,Event(event.x, event.y, False, True, event.other_end, event.label,event.label,None,None,((event.x,event.y),event.other_end)))
-    #                 intersections.append(intersect(pred[0], pred[1], succ[0], succ[1]))
-    #                 # event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end))
-    #             try:
-    #                 T.delete(n2)
-    #             except:
-    #                 print("hmmm")
-    #         print("intersection event")
+    #                     print("hmmm")
+    #             print("intersection event")
+    #         except:
+    #             print("d")
     # # cnt = cnt + 1
     # # *** need to implement ***  
     # count = 0
