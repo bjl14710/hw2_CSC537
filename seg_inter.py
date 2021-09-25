@@ -4,6 +4,8 @@ import math
 import random
 from tkinter import *
 import copy
+import time
+import matplotlib.pyplot as plt
 
 YSIZE = 1000
 PSIZE = 4
@@ -31,33 +33,20 @@ class Event:
 # checks if line segment p1p2 and p3p4 intersect
 #-----------------------------------------------------------------
 #find if the point is on the line segment
-def onLine(p1,p2, point):
-    if (point[0] <= max(p1[0],p2[0]) and point[0] <= min(p1[0],p2[0])
-    and point[1] <= max(p1[1], p2[1]) and point[1] <= min(p1[1], p2[1])):
-        return True
-    else:
-        return False
 
-def direction(p1,p2,p3):
-    # (b.y-a.y)*(c.x-b.x)-(b.x-a.x)*(c.y-b.y)
-    val = (p2[1]-p1[1])*(p3[0]-p2[0])-(p2[0]-p1[0])*(p3[1]-p2[1])
-    if val == 0:
-        #collinear
-        return 0
-    elif val < 0:
-        #counter-clockwise
-        return -1
-    else:
-        #clockwise
-        return 1
+
+
 
 def find_B(p1,m):
     # y-mx
+    if m is None:
+        return 
     return (p1[1]-p1[0]*m)
     
 def slopeOf(s):
+    if (s[1][0]-s[0][0]) == 0:
+        return 
     return (s[1][1]-s[0][1])/(s[1][0]-s[0][0])
-
 
 
 def intersect(p1, p2, p3, p4):
@@ -68,12 +57,14 @@ def intersect(p1, p2, p3, p4):
     B1 = find_B(p1, m1)
     B2 = find_B(p3, m2)
 
-    # from https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
-    # a = m1, b = m2, c = B1, d = B2
+    if m1 == None or m2 == None or B1 == None or B2 == None:
+        return 
+    if(m1-m2 == 0):
+        return 
     x = (B2-B1)/(m1-m2)
     y = m1*((B2-B1)/(m1-m2))+B1
-
     return x,y
+    
 
 
 
@@ -104,20 +95,13 @@ def find_intersections(event):
         event = min_node.data
         Q.delete(min_node)
         if event.is_left:
-            print("left event")
             node = T.insert_segment(event.label, Event(event.x, event.y, False, False, event.other_end, event.label))
             pred = T.predecessor(node)
             if pred:
                 if intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end):
                     Q.insert_segment(event.label,Event(event.x, event.y, True, True, event.other_end, event.label,event.label,((event.x,event.y),event.other_end)))
-                    
                     intersectPoint = intersect((node.data.x,node.data.y),node.data.other_end,(pred.data.x,pred.data.y),pred.data.other_end)
-                    
                     intersections.append((intersectPoint[0],intersectPoint[1]))
-                    
-
-                    print("intersect pred")
-                    
             succ = T.successor(node)
             if succ:
                 if intersect((node.data.x,node.data.y),node.data.other_end,(succ.data.x,succ.data.y),succ.data.other_end):
@@ -137,17 +121,13 @@ def find_intersections(event):
             try:
                 T.delete(node)
             except:
-                print("idk")
+                print("couldn't delete node")
             
             print("right event")
         else:
             intersections.append((event.x,event.y))
-            print("ddd")
             n1 = T.searchx(event.plabel,event.psegment,event.x)
             n2 = T.searchx(event.slabel,event.ssegment,event.x)
-            
-            print("test")
-            
             T.swap(n1,n2,event.x)
             pred = T.predecessor(n1)
             succ = T.successor(n2)
@@ -190,7 +170,15 @@ def drawPoint(point):
     p = (point[0], YSIZE - point[1])
     canvas.create_oval(p[0] - PSIZE, p[1] - PSIZE, p[0] + PSIZE, p[1] + PSIZE, fill='red', w=2)
 
-
+def timeSegmentIntersections():
+    times = []
+    
+    for x in range(0,300,10):
+        start_time = time.time()
+        list2 = find_intersections(randomSegments[0:x])
+        elapsed_time = time.time()-start_time
+        times.append(elapsed_time)
+    return times
 # =========================================
 root = Tk()
 root.title("Segments")
@@ -202,6 +190,16 @@ canvas.grid(row=0, column=0)
 
 S = [((210,530),(900,450)), ((90,50),(850,200)),((80,200),(900,400)),((100,500),(920,200)),((82,300),(150,220))]
 # S = [((random.randint(100, 900), random.randint(100, 900)),(random.randint(100, 900), random.randint(100, 900))) for _ in range(10)]
+randomSegments = [((random.randint(100, 300), random.randint(100, 300)),(random.randint(100, 300), random.randint(100, 300))) for _ in range(300)]
+
+complexityPoints = []
+complexityPoints = timeSegmentIntersections()
+plt.plot(range(0,300,10),complexityPoints)
+#plt.plot(range(2),complexityPoints)
+plt.xlabel('size: N')
+plt.ylabel('time(S)')
+plt.title('Run Time for Bentley-Ottman')
+plt.show()
 
 print(S)
 drawSegments(S)

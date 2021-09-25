@@ -185,22 +185,9 @@ class RedBlackTree:
         return -1
       else:
         return 0
-    # if s1 is higher than s2 than that is the above segment. 
-    
-    # return False
-
+  
   def searchx(self, key, data, xcoord):
     x = self.root
-    # *** need to implement ***
-    # fn used to search for a segment (data)
-    # if x is None: x = self.root
-    # while data and not(x.right.right == None or x.left.left == None):# and x.key != key:
-    #   if Above(data,x.data,xcoord) < 0:
-    #     x = x.right
-    #   elif Above(data,x.data,xcoord) > 0:
-    #     x = x.left
-    # return x
-  
     if x is None: x = self.root
     if key is None: return x
     while x :# and x.key != key:
@@ -215,21 +202,14 @@ class RedBlackTree:
 
   def swap(self, nn1, nn2, x):      
     print('swap')
-    # *** need to implement ***
-    # fn used to swap two nodes in the tree
-
-    # print('nn1 ', nn1.key)
-    # print('nn2 ', nn2.key)
     
     tmp = Node(0) 
     if nn1.key is None:
       tmp.key = None
-      # if not (nn1.data is None):
-      #   tmp.data = nn1.data
+      
     if nn1.data is None:
       tmp.data = None
-      # if not (nn1.key is None):
-      #   tmp.key = nn1.key
+      
     else:
       tmp.key = nn1.key
       tmp.data = nn1.data
